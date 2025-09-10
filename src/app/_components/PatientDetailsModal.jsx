@@ -98,7 +98,7 @@ const PatientPrintModal = ({ isOpen, onClose, patient }) => {
               {patient.medicalHistory}
             </p>
             <p>
-              <span className="font-semibold">Height:</span> {patient.height} ft
+              <span className="font-semibold">Height:</span> {patient.height} cm
             </p>
             <p>
               <span className="font-semibold">Weight:</span> {patient.weight} kg

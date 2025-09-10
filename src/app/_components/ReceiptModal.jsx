@@ -11,23 +11,25 @@ export default function ReceiptModal({ isOpen, onClose, appointment }) {
     if (!printWindow) return;
     printWindow.document.open();
     printWindow.document.write(`
-      <html>
-        <head>
-          <title>Appointment Receipt</title>
-          <style>
-            body { font-family: Arial, sans-serif; padding: 20px; color: #111; }
-            h1 { font-size: 20px; margin-bottom: 8px; }
-            .meta { color: #555; margin-bottom: 12px; }
-            .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
-            .label { font-weight: bold; }
-            .box { border: 1px solid #ddd; border-radius: 8px; padding: 12px; }
-          </style>
-        </head>
-        <body onload="window.print(); window.close();">
-          ${content}
-        </body>
-      </html>
-    `);
+  <html>
+    <head>
+      <title>Appointment Receipt</title>
+      <style>
+        body { font-family: Arial, sans-serif; padding: 20px; color: #111; }
+        h1 { font-size: 20px; margin-bottom: 8px; }
+        .meta { color: #555; margin-bottom: 12px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px 16px; }
+        .label { font-weight: bold; }
+        .box { border: 1px solid #ddd; border-radius: 8px; padding: 12px; }
+        img { width: 40px; height: 40px; object-fit: contain; } /* ✅ Added */
+      </style>
+    </head>
+    <body onload="window.print(); window.close();">
+      ${content}
+    </body>
+  </html>
+`);
+
     printWindow.document.close();
   };
 
@@ -61,28 +63,43 @@ export default function ReceiptModal({ isOpen, onClose, appointment }) {
         <div ref={printableRef} className="space-y-3">
           <div className="box">
             <div className="flex items-center gap-3 mb-2">
-              <img src="/logo.png" alt="Jamal Hospital" className="w-10 h-10 object-contain" />
+              <img
+                src="/logo.png"
+                alt="Jamal Hospital"
+                className="w-10 h-10 object-contain"
+              />
               <div>
                 <h1>Jamal Hospital</h1>
-                <div className="meta">Thank you for booking your appointment.</div>
+                <div className="meta">
+                  Thank you for booking your appointment.
+                </div>
               </div>
             </div>
             <div className="grid">
               <div className="label">Receipt ID</div>
               <div>{appointment._id || appointment.id || "-"}</div>
               <div className="label">Patient</div>
-              <div>{appointment.firstName} {appointment.lastName}</div>
+              <div>
+                {appointment.firstName} {appointment.lastName}
+              </div>
               <div className="label">Phone</div>
               <div>{appointment.phone}</div>
               <div className="label">Email</div>
               <div>{appointment.email || "-"}</div>
               <div className="label">Department</div>
-              <div>{appointment.departmentId?.name || appointment.department?.name || "-"}</div>
+              <div>
+                {appointment.departmentId?.name ||
+                  appointment.department?.name ||
+                  "-"}
+              </div>
               <div className="label">Doctor</div>
               <div>
-                {appointment.doctorId?.firstName || appointment.doctor?.firstName || ""}
-                {" "}
-                {appointment.doctorId?.lastName || appointment.doctor?.lastName || ""}
+                {appointment.doctorId?.firstName ||
+                  appointment.doctor?.firstName ||
+                  ""}{" "}
+                {appointment.doctorId?.lastName ||
+                  appointment.doctor?.lastName ||
+                  ""}
               </div>
               <div className="label">Appointment Date</div>
               <div>{formatDate(appointment.appointmentDate)}</div>
@@ -99,12 +116,22 @@ export default function ReceiptModal({ isOpen, onClose, appointment }) {
             <h1>Terms and Conditions</h1>
             <ul className="list-disc pl-5 text-sm text-gray-700 space-y-1">
               <li>Please arrive 10–15 minutes before your scheduled time.</li>
-              <li>Bring a valid ID and previous medical records if available.</li>
+              <li>
+                Bring a valid ID and previous medical records if available.
+              </li>
               <li>Appointment times may vary based on emergency cases.</li>
               <li>Fees are subject to change and are payable at reception.</li>
-              <li>For rescheduling, contact the hospital at least 24 hours in advance.</li>
-              <li>By booking, you consent to hospital policies and data processing.</li>
-              <li>This is a computer generated receipt and is not a physical receipt.</li>
+              <li>
+                For rescheduling, contact the hospital at least 24 hours in
+                advance.
+              </li>
+              <li>
+                By booking, you consent to hospital policies and data
+                processing.
+              </li>
+              <li>
+                This is a computer generated receipt no need of signature.
+              </li>
             </ul>
           </div>
         </div>
@@ -121,5 +148,3 @@ export default function ReceiptModal({ isOpen, onClose, appointment }) {
     </div>
   );
 }
-
-
