@@ -12,6 +12,7 @@ const PatientFormModal = ({
   const [departments, setDepartments] = useState([]);
   const [allDoctors, setAllDoctors] = useState([]);
   const [filteredDoctors, setFilteredDoctors] = useState([]);
+  const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -76,11 +77,26 @@ const PatientFormModal = ({
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
+  // const handleChange = (e) => {
+  //   const { name, value } = e.target;
+  //   setFormData({ ...formData, [name]: value });
+
+  //   // If department changes, filter doctors
+  //   if (name === "departmentId") {
+  //     const filtered = allDoctors.filter(
+  //       (doctor) =>
+  //         doctor.departmentId === value || doctor.department?._id === value
+  //     );
+  //     setFilteredDoctors(filtered);
+  //     setFormData((prev) => ({ ...prev, doctorId: "" }));
+  //   }
+  // };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
 
-    // If department changes, filter doctors
+    // If department changes → filter doctors
     if (name === "departmentId") {
       const filtered = allDoctors.filter(
         (doctor) =>
@@ -88,12 +104,30 @@ const PatientFormModal = ({
       );
       setFilteredDoctors(filtered);
       setFormData((prev) => ({ ...prev, doctorId: "" }));
+      setSelectedDoctor(null); // reset selected doctor when department changes
+    }
+
+    // If doctor changes → set selectedDoctor
+    if (name === "doctorId") {
+      const doctor = allDoctors.find((d) => d._id === value);
+      setSelectedDoctor(doctor || null);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    if (selectedDoctor?.availabilityTime) {
+      const { start, end } = selectedDoctor.availabilityTime;
+      const patientTime = formData.appointmentTime;
+      if (patientTime) {
+        if (patientTime < start || patientTime > end) {
+          toast.error(
+            `Doctor is available from ${start} to ${end}. Please select a valid time.`
+          );
+          return;
+        }
+      }
+    }
     const payload = {
       ...formData,
       appointmentDate: formData.appointmentDate,

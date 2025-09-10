@@ -89,13 +89,13 @@ const DoctorFormModel = ({ isOpen, onClose, onDoctorAdded }) => {
     } catch (error) {
       if (error.response) {
         console.error("Server error:", error.response.data);
-        alert("Failed to save Doctor: " + error.response.data.error);
+        toast.error("Failed to save Doctor: " + error.response.data.error);
       } else if (error.request) {
         console.error("No response from server:", error.request);
-        alert("No response from server.");
+        toast.error("No response from server.");
       } else {
         console.error("Error:", error.message);
-        alert("Error: " + error.message);
+        toast.error("Error: " + error.message);
       }
     }
   };

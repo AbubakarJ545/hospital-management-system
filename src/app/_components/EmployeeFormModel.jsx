@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const EmployeeFormModel = ({ isOpen, onClose, onEmployeeAdded }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -39,20 +40,20 @@ const EmployeeFormModel = ({ isOpen, onClose, onEmployeeAdded }) => {
     try {
       const response = await axios.post("/api/employees", payload);
       if (response.data.success) {
-        alert("Employee saved successfully!");
+        toast.success("Employee saved successfully!");
         onEmployeeAdded?.(response.data.data);
         onClose();
       }
     } catch (error) {
       if (error.response) {
         console.error("Server error:", error.response.data);
-        alert("Failed to save Employee: " + error.response.data.error);
+        toast.error("Failed to save Employee: " + error.response.data.error);
       } else if (error.request) {
         console.error("No response from server:", error.request);
-        alert("No response from server.");
+        toast.error("No response from server.");
       } else {
         console.error("Error:", error.message);
-        alert("Error: " + error.message);
+        toast.error("Error: " + error.message);
       }
     }
   };

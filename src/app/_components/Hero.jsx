@@ -1,69 +1,3 @@
-// "use client";
-
-// import { useState } from "react";
-
-// export default function Hero({ onBookAppointment, onSearchDoctor }) {
-//   const [search, setSearch] = useState("");
-
-//   const handleSearch = () => {
-//     if (onSearchDoctor) {
-//       onSearchDoctor(search); // call parent handler
-//     }
-//   };
-
-//   return (
-//     <section className="bg-red-50 pt-28 pb-16">
-//       <div className="max-w-7xl mx-auto px-6 flex flex-col md:flex-row items-center">
-//         {/* Text Content */}
-//         <div className="flex-1 text-center md:text-left">
-//           <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-//             Welcome to <span className="text-red-600">Jamal Hospital</span>
-//           </h1>
-//           <p className="text-lg text-gray-700 mb-6">
-//             Trusted healthcare with experienced doctors and modern technology,
-//             serving you 24/7 with care and compassion.
-//           </p>
-
-//           {/* Buttons + Search */}
-//           <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
-//             <button
-//               onClick={onBookAppointment}
-//               className="bg-red-600 text-white px-6 py-3 rounded-lg shadow hover:bg-red-700 transition"
-//             >
-//               Book an Appointment
-//             </button>
-
-//             {/* Search Box */}
-//             <div className="flex w-full sm:w-auto">
-//               <input
-//                 type="text"
-//                 placeholder="Search doctors..."
-//                 value={search}
-//                 onChange={(e) => setSearch(e.target.value)}
-//                 className="px-4 py-3 rounded-l-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500 w-full sm:w-64"
-//               />
-//               <button
-//                 onClick={handleSearch}
-//                 className="bg-red-600 text-white px-4 py-3 rounded-r-lg shadow hover:bg-red-700 transition"
-//               >
-//                 Search
-//               </button>
-//             </div>
-//           </div>
-//         </div>
-
-//         {/* Image */}
-//         <div className="flex-1 mt-10 md:mt-0">
-//           <img
-//             src="/doctor.jpg"
-//             alt="Jamal Hospital"
-//             className="w-full rounded-lg shadow-lg"
-//           />
-//         </div>
-//       </div>
-//     </section>
-//   );
-// }
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
@@ -184,7 +118,7 @@ export default function Hero() {
           />
         </div>
       </div>
-      
+
       {/* Doctor Profile Modal */}
       <DoctorProfile
         isOpen={isProfileOpen}
@@ -192,7 +126,7 @@ export default function Hero() {
         doctor={selectedDoctor}
         onBookAppointment={handleBookAppointment}
       />
-      
+
       {/* Patient Form Modal */}
       <PatientFormModal
         isOpen={isPatientModalOpen}

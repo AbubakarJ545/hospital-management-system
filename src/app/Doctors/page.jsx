@@ -6,6 +6,7 @@ import { FaRegEdit } from "react-icons/fa";
 import DoctorFormModel from "../_components/DoctorFormModel";
 import axios from "axios";
 import DoctorProfile from "../_components/DoctorProfile";
+import toast from "react-hot-toast";
 
 const Doctor = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,10 +36,10 @@ const Doctor = () => {
     try {
       await axios.delete(`/api/doctors/${doctorId}`);
       setDoctors(doctors.filter((doc) => doc._id !== doctorId));
-      alert("Doctor deleted successfully");
+      toast.success("Doctor deleted successfully");
     } catch (error) {
       console.error("Error deleting doctor:", error.response?.data || error);
-      alert("Failed to delete doctor");
+      toast.error("Failed to delete doctor");
     }
   };
   // Pagination States

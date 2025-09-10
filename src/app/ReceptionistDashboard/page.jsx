@@ -5,6 +5,7 @@ import Sidebar from "../_components/SideBar";
 import PatientFormModal from "../_components/PatientFormModal";
 import { useRouter } from "next/navigation";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const ReceptionistDashboard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,9 +17,9 @@ const ReceptionistDashboard = () => {
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
   const [recordsPerPage, setRecordsPerPage] = useState(5);
-  
+
   // Search state
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
   useEffect(() => {
     const fetchPatientsAndDoctors = async () => {
@@ -34,13 +35,13 @@ const ReceptionistDashboard = () => {
         setDoctors(allDoctors);
       }
     };
-    
+
     // Initial fetch
     fetchPatientsAndDoctors();
-    
+
     // Set up periodic refresh every 10 seconds to show updated status
     const interval = setInterval(fetchPatientsAndDoctors, 10000);
-    
+
     // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, []);
@@ -52,14 +53,15 @@ const ReceptionistDashboard = () => {
   // Search and filter logic
   const filteredPatients = todayPatients.filter((patient) => {
     if (!searchTerm) return true;
-    
+
     const searchLower = searchTerm.toLowerCase();
-    const patientName = `${patient.firstName} ${patient.lastName}`.toLowerCase();
-    const doctorName = patient.doctorId 
+    const patientName =
+      `${patient.firstName} ${patient.lastName}`.toLowerCase();
+    const doctorName = patient.doctorId
       ? `${patient.doctorId.firstName} ${patient.doctorId.lastName}`.toLowerCase()
-      : '';
-    const departmentName = patient.departmentId?.name?.toLowerCase() || '';
-    
+      : "";
+    const departmentName = patient.departmentId?.name?.toLowerCase() || "";
+
     return (
       patientName.includes(searchLower) ||
       doctorName.includes(searchLower) ||
@@ -71,7 +73,10 @@ const ReceptionistDashboard = () => {
   const totalRecords = filteredPatients.length;
   const totalPages = Math.ceil(totalRecords / recordsPerPage);
   const startIndex = (currentPage - 1) * recordsPerPage;
-  const currentRecords = filteredPatients.slice(startIndex, startIndex + recordsPerPage);
+  const currentRecords = filteredPatients.slice(
+    startIndex,
+    startIndex + recordsPerPage
+  );
 
   // Pagination handlers
   const handlePrev = () => setCurrentPage((p) => Math.max(p - 1, 1));
@@ -88,7 +93,7 @@ const ReceptionistDashboard = () => {
   };
 
   const clearSearch = () => {
-    setSearchTerm('');
+    setSearchTerm("");
     setCurrentPage(1);
   };
 
@@ -102,7 +107,15 @@ const ReceptionistDashboard = () => {
     } else if (currentPage >= totalPages - 2) {
       pages.push(1, "...", totalPages - 2, totalPages - 1, totalPages);
     } else {
-      pages.push(1, "...", currentPage - 1, currentPage, currentPage + 1, "...", totalPages);
+      pages.push(
+        1,
+        "...",
+        currentPage - 1,
+        currentPage,
+        currentPage + 1,
+        "...",
+        totalPages
+      );
     }
     return pages;
   };
@@ -128,7 +141,7 @@ const ReceptionistDashboard = () => {
     { title: "View Doctors", action: () => router.push("/Doctors") },
     {
       title: "Schedule Appointment",
-      action: () => alert("Schedule Appointment Clicked"),
+      action: () => toast.success("Schedule Appointment Clicked"),
     },
   ];
 
@@ -201,7 +214,9 @@ const ReceptionistDashboard = () => {
           <div className="flex justify-between items-center mb-3">
             <h2 className="text-xl font-semibold">Today's Appointments</h2>
             <div className="text-sm text-gray-600">
-              Showing {startIndex + 1} to {Math.min(startIndex + recordsPerPage, totalRecords)} of {totalRecords} appointments
+              Showing {startIndex + 1} to{" "}
+              {Math.min(startIndex + recordsPerPage, totalRecords)} of{" "}
+              {totalRecords} appointments
             </div>
           </div>
 
@@ -216,8 +231,18 @@ const ReceptionistDashboard = () => {
                 className="w-full px-4 py-2 pl-10 pr-10 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
               />
               <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <svg className="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                <svg
+                  className="h-4 w-4 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                  />
                 </svg>
               </div>
               {searchTerm && (
@@ -225,19 +250,30 @@ const ReceptionistDashboard = () => {
                   onClick={clearSearch}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600"
                 >
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
                   </svg>
                 </button>
               )}
             </div>
             {searchTerm && (
               <div className="mt-2 text-xs text-gray-600">
-                Search results for: <span className="font-medium">"{searchTerm}"</span>
+                Search results for:{" "}
+                <span className="font-medium">"{searchTerm}"</span>
               </div>
             )}
           </div>
-          
+
           <div className="overflow-x-auto">
             <table className="w-full border border-gray-200 text-xs">
               <thead>
@@ -254,12 +290,18 @@ const ReceptionistDashboard = () => {
                 {currentRecords.length > 0 ? (
                   currentRecords.map((appt, index) => (
                     <tr key={index} className="hover:bg-gray-50 text-xs">
-                      <td className="border p-1 text-center">{startIndex + index + 1}</td>
-                      <td className="border p-1">{appt.appointmentTime || "N/A"}</td>
+                      <td className="border p-1 text-center">
+                        {startIndex + index + 1}
+                      </td>
+                      <td className="border p-1">
+                        {appt.appointmentTime || "N/A"}
+                      </td>
                       <td className="border p-1">
                         {appt.firstName} {appt.lastName}
                       </td>
-                      <td className="border p-1">{appt.departmentId?.name || "N/A"}</td>
+                      <td className="border p-1">
+                        {appt.departmentId?.name || "N/A"}
+                      </td>
                       <td className="border p-1">
                         {appt.doctorId
                           ? `${appt.doctorId.firstName} ${appt.doctorId.lastName}`
@@ -268,11 +310,7 @@ const ReceptionistDashboard = () => {
                       <td className="border p-1 text-center">
                         <span
                           className={`px-1 py-0.5 rounded text-xs text-white inline-block
-                    ${
-                      appt.checked
-                        ? "bg-green-500"
-                        : "bg-red-500"
-                    }`}
+                    ${appt.checked ? "bg-green-500" : "bg-red-500"}`}
                         >
                           {appt.checked ? "✓" : "⏳"}
                         </span>
@@ -281,8 +319,13 @@ const ReceptionistDashboard = () => {
                   ))
                 ) : (
                   <tr>
-                    <td colSpan={6} className="border p-2 text-center text-gray-500">
-                      {searchTerm ? `No appointments found for "${searchTerm}"` : "No appointments for today"}
+                    <td
+                      colSpan={6}
+                      className="border p-2 text-center text-gray-500"
+                    >
+                      {searchTerm
+                        ? `No appointments found for "${searchTerm}"`
+                        : "No appointments for today"}
                     </td>
                   </tr>
                 )}
